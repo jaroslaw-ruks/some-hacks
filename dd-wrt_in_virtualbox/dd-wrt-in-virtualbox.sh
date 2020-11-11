@@ -4,16 +4,25 @@ if [ -z $1 ]; then
     echo "write name of vm"
     exit
 fi
+
 function reload(){
 sleep 10
 vboxmanage controlvm $vm_name reset
-while [ true ]; do nc 192.168.1.1 22 -vzw 5; if [ $? -eq 0 ]; then break; fi ; sleep 5 ; done
+while [ true ]; do 
+	nc 192.168.1.1 22 -vzw 5; 
+	if [ $? -eq 0 ]; then 
+		break; 
+	fi ; 
+	sleep 5 ; 
+done
 sleep 10
 }
+
 vm_name=$1
 if [ ! -f ~/Downloads/dd-wrt.image ]; then
     wget -v https://download1.dd-wrt.com/dd-wrtv2/downloads/betas/2020/04-20-2020-r42954/x86_64/dd-wrt_x64_public_vga.image -O ~/Downloads/dd-wrt.image 
 fi
+
 image_path=~/Downloads/dd-wrt.image
 vboxmanage createvm --name $vm_name --register;
 vboxmanage modifyvm $vm_name --ostype Linux;
